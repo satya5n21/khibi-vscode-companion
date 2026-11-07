@@ -1,0 +1,23 @@
+{
+    "name": "khibi-monorepo",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Khibi – Your Cute Chibi Coding Companion for VS Code",
+    "workspaces": [
+        "packages/shared",
+        "packages/companion-app",
+        "packages/vscode-extension"
+    ],
+    "scripts": {
+        "build:shared": "npm --workspace=@khibi/shared run build",
+        "build:companion": "npm --workspace=@khibi/companion-app run build",
+        "build:extension": "npm --workspace=khibi-vscode-extension run build",
+        "build": "npm run build:shared && npm run build:companion && npm run build:extension",
+        "test": "npm --workspace=khibi-vscode-extension run test",
+        "package:vsix": "npm run build && npm --workspace=khibi-vscode-extension run package"
+    },
+    "devDependencies": {
+        "@types/node": "^20.14.0",
+        "typescript": "^5.5.3"
+    }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self';" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Khibi Companion</title>
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+    <div id="companion-shell" class="companion-shell state-awake expr-normal">
+        <!-- Minimal floating controls on hover -->
+        <div class="window-controls">
+            <button id="btn-mute" class="ctrl-btn" title="Toggle Sound">🔊</button>
+            <button id="btn-hide" class="ctrl-btn" title="Hide Khibi">✕</button>
+        </div>
+
+        <!-- Speech bubble -->
+        <div id="speech-bubble" class="speech-bubble hidden" role="status" aria-live="polite">
+            <span id="speech-text"></span>
+            <div class="speech-tail"></div>
+        </div>
+
+        <!-- Floating particle effects container -->
+        <div id="fx-layer" class="fx-layer">
+            <span class="fx-item fx-zzz z1">Z</span>
+            <span class="fx-item fx-zzz z2">z</span>
+            <span class="fx-item fx-zzz z3">z</span>
+            <span class="fx-item fx-sparkle s1">✦</span>
+            <span class="fx-item fx-sparkle s2">★</span>
+            <span class="fx-item fx-heart h1">❤️</span>
+            <span class="fx-item fx-question q1">?</span>
+        </div>
+
+        <!-- Chibi SVG Mount Point -->
+        <div id="character-stage" class="character-stage" title="Click to pat Khibi! Drag to move."></div>
+
+        <!-- Subtle status pill -->
+        <div class="status-pill">
+            <span class="status-dot" id="status-dot"></span>
+            <span class="status-label" id="status-label">Khibi</span>
+        </div>
+    </div>
+
+    <script src="./renderer.js"></script>
+</body>
+
+</html>

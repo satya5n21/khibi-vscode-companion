@@ -1,0 +1,148 @@
+{
+    "name": "khibi-vscode-extension",
+    "displayName": "Khibi – Your Cute Coding Companion",
+    "description": "An adorable interactive chibi desktop coding buddy who reacts to your saves, errors, tests, and naps when you're away.",
+    "version": "1.0.0",
+    "publisher": "khibi-dev",
+    "engines": {
+        "vscode": "^1.93.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "khibi.showCompanion",
+                "title": "Khibi: Show Coding Companion"
+            },
+            {
+                "command": "khibi.hideCompanion",
+                "title": "Khibi: Hide Coding Companion"
+            },
+            {
+                "command": "khibi.togglePause",
+                "title": "Khibi: Pause / Resume Companion"
+            },
+            {
+                "command": "khibi.petCompanion",
+                "title": "Khibi: Give Khibi a Headpat ❤️"
+            },
+            {
+                "command": "khibi.reportTestPass",
+                "title": "Khibi: Trigger Test Pass Celebration"
+            },
+            {
+                "command": "khibi.reportTestFail",
+                "title": "Khibi: Trigger Test Fail Encouragement"
+            }
+        ],
+        "configuration": {
+            "title": "Khibi Coding Companion",
+            "properties": {
+                "khibi.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable or disable the Khibi desktop companion."
+                },
+                "khibi.inactivityTimeoutMinutes": {
+                    "type": "number",
+                    "default": 5,
+                    "minimum": 1,
+                    "maximum": 120,
+                    "description": "Minutes of coding inactivity before Khibi gets sleepy and falls asleep."
+                },
+                "khibi.alwaysOnTop": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Keep Khibi's desktop window floating above other windows."
+                },
+                "khibi.windowSize": {
+                    "type": "string",
+                    "enum": [
+                        "small",
+                        "medium",
+                        "large"
+                    ],
+                    "default": "medium",
+                    "description": "Preset size for Khibi's desktop window."
+                },
+                "khibi.windowOpacity": {
+                    "type": "number",
+                    "default": 1.0,
+                    "minimum": 0.3,
+                    "maximum": 1.0,
+                    "description": "Opacity of Khibi's companion window (0.3 to 1.0)."
+                },
+                "khibi.soundEffects": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Play gentle synthesized sound effects when Khibi reacts."
+                },
+                "khibi.showDialogueBubbles": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Display Khibi's speech bubbles above his head."
+                },
+                "khibi.paused": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Temporarily pause Khibi's automatic reactions."
+                },
+                "khibi.reactions.onStartup": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "React with a greeting when VS Code starts."
+                },
+                "khibi.reactions.onSave": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "React happily when saving a file."
+                },
+                "khibi.reactions.onError": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "React with encouragement when a new error diagnostic appears."
+                },
+                "khibi.reactions.onTestResult": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "React when test suites pass or fail."
+                },
+                "khibi.reactions.onIdleSleep": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Fall asleep after the configured inactivity timeout."
+                },
+                "khibi.customTestCommandPatterns": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [],
+                    "description": "Additional regex patterns to identify test commands executed in the terminal."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "test": "npm run build && node --test dist/test/stateMachine.test.js",
+        "package": "vsce package"
+    },
+    "dependencies": {
+        "@khibi/shared": "1.0.0",
+        "ws": "^8.18.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.14.0",
+        "@types/vscode": "^1.93.0",
+        "@types/ws": "^8.5.12",
+        "@vscode/vsce": "^3.0.0",
+        "typescript": "^5.5.3"
+    }
+}

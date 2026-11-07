@@ -1,0 +1,262 @@
+/**
+ * Returns the complete layered SVG markup for Khibi:
+ * - Pastel mint hoodie with drawstring pom-poms
+ * - Oversized expressive head with soft peach skin & rosy cheeks
+ * - Fluffy pastel periwinkle-lavender anime hair + animated ahoge cowlick
+ * - 10 distinct expression layers (normal, happy, excited/celebrating, sleepy, sleeping,
+ *   surprised, worried, sad, thinking)
+ */
+export function buildKhibiSvg(): string {
+    return `
+  <svg class="khibi-svg" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#c3b5ff" />
+        <stop offset="100%" stop-color="#8f7cf6" />
+      </linearGradient>
+      <linearGradient id="hoodieGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#a8f5e0" />
+        <stop offset="100%" stop-color="#6ddbc0" />
+      </linearGradient>
+      <linearGradient id="irisGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#6a5acd" />
+        <stop offset="55%" stop-color="#7c9eff" />
+        <stop offset="100%" stop-color="#5eead4" />
+      </linearGradient>
+      <radialGradient id="blushGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ff8da1" stop-opacity="0.65" />
+        <stop offset="100%" stop-color="#ff8da1" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    <!-- Soft Ground Shadow -->
+    <ellipse cx="100" cy="204" rx="44" ry="8" fill="rgba(120, 100, 160, 0.18)" />
+
+    <g class="khibi-whole">
+      <!-- CHIBI BODY & PASTEL MINT HOODIE -->
+      <g class="khibi-body-group">
+        <!-- Legs / Pastel Shoes -->
+        <rect x="79" y="178" width="14" height="20" rx="7" fill="#5e548e" />
+        <rect x="107" y="178" width="14" height="20" rx="7" fill="#5e548e" />
+        <ellipse cx="85" cy="197" rx="10" ry="5.5" fill="#ffffff" stroke="#c3b5ff" stroke-width="1.5" />
+        <ellipse cx="115" cy="197" rx="10" ry="5.5" fill="#ffffff" stroke="#c3b5ff" stroke-width="1.5" />
+
+        <!-- Left Arm -->
+        <g class="arm-left">
+          <path d="M 70 142 C 52 148, 48 164, 58 170 C 65 174, 72 162, 74 154 Z" fill="url(#hoodieGrad)" stroke="#5c4d7d" stroke-width="2" />
+          <circle cx="57" cy="168" r="6" fill="#ffe5d9" stroke="#5c4d7d" stroke-width="1.8" />
+        </g>
+
+        <!-- Right Arm -->
+        <g class="arm-right">
+          <path d="M 130 142 C 148 148, 152 164, 142 170 C 135 174, 128 162, 126 154 Z" fill="url(#hoodieGrad)" stroke="#5c4d7d" stroke-width="2" />
+          <circle cx="143" cy="168" r="6" fill="#ffe5d9" stroke="#5c4d7d" stroke-width="1.8" />
+        </g>
+
+        <!-- Hoodie Torso -->
+        <path d="M 68 136 C 64 158, 66 182, 74 184 L 126 184 C 134 182, 136 158, 132 136 Z" fill="url(#hoodieGrad)" stroke="#5c4d7d" stroke-width="2.2" />
+
+        <!-- Front Kangaroo Pocket -->
+        <path d="M 80 164 L 120 164 L 124 178 L 76 178 Z" fill="#ffffff" fill-opacity="0.55" stroke="#5c4d7d" stroke-width="1.5" />
+
+        <!-- Cute Hoodie Drawstrings & Pom-Poms -->
+        <path d="M 92 138 Q 90 150 91 155" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" />
+        <path d="M 108 138 Q 110 150 109 155" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" />
+        <circle cx="91" cy="157" r="4" fill="#ffb3c6" stroke="#5c4d7d" stroke-width="1.2" />
+        <circle cx="109" cy="157" r="4" fill="#ffb3c6" stroke="#5c4d7d" stroke-width="1.2" />
+      </g>
+
+      <!-- OVERSIZED EXPRESSIVE CHIBI HEAD -->
+      <g class="khibi-head-group">
+        <!-- Back Hair Layer -->
+        <path d="M 42 88 C 36 112, 48 135, 62 138 L 138 138 C 152 135, 164 112, 158 88 C 154 52, 132 34, 100 34 C 68 34, 46 52, 42 88 Z" fill="url(#hairGrad)" stroke="#5c4d7d" stroke-width="2.4" />
+
+        <!-- Ears -->
+        <ellipse cx="47" cy="104" rx="8" ry="10" fill="#ffe5d9" stroke="#5c4d7d" stroke-width="2" />
+        <ellipse cx="153" cy="104" rx="8" ry="10" fill="#ffe5d9" stroke="#5c4d7d" stroke-width="2" />
+
+        <!-- Face Base -->
+        <rect x="50" y="54" width="100" height="84" rx="41" fill="#ffe5d9" stroke="#5c4d7d" stroke-width="2.3" />
+
+        <!-- Soft Pastel Blush Cheeks -->
+        <ellipse cx="67" cy="112" rx="11" ry="6.5" fill="url(#blushGrad)" />
+        <ellipse cx="133" cy="112" rx="11" ry="6.5" fill="url(#blushGrad)" />
+
+        <!-- ================= EYES VARIANTS ================= -->
+        <!-- 1. Normal Luminous Anime Eyes -->
+        <g class="eye-variant eyes-normal">
+          <!-- Left Eye -->
+          <ellipse cx="75" cy="101" rx="11.5" ry="13.5" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.2" />
+          <ellipse cx="76" cy="102" rx="8.5" ry="10.5" fill="url(#irisGrad)" />
+          <ellipse cx="76" cy="103" rx="4.2" ry="5.2" fill="#2d2640" />
+          <circle cx="72" cy="96" r="3.6" fill="#ffffff" />
+          <circle cx="80" cy="107" r="1.8" fill="#ffffff" />
+          <!-- Right Eye -->
+          <ellipse cx="125" cy="101" rx="11.5" ry="13.5" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.2" />
+          <ellipse cx="124" cy="102" rx="8.5" ry="10.5" fill="url(#irisGrad)" />
+          <ellipse cx="124" cy="103" rx="4.2" ry="5.2" fill="#2d2640" />
+          <circle cx="120" cy="96" r="3.6" fill="#ffffff" />
+          <circle cx="128" cy="107" r="1.8" fill="#ffffff" />
+        </g>
+
+        <!-- 2. Happy Crescent Arches (^ ^) -->
+        <g class="eye-variant eyes-happy">
+          <path d="M 63 102 Q 75 88 87 102" fill="none" stroke="#4a3f5c" stroke-width="3.6" stroke-linecap="round" />
+          <path d="M 113 102 Q 125 88 137 102" fill="none" stroke="#4a3f5c" stroke-width="3.6" stroke-linecap="round" />
+        </g>
+
+        <!-- 3. Excited / Celebrating Starry Eyes -->
+        <g class="eye-variant eyes-sparkle">
+          <ellipse cx="75" cy="101" rx="12" ry="14" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.2" />
+          <ellipse cx="75" cy="101" rx="9.5" ry="11.5" fill="url(#irisGrad)" />
+          <polygon points="75,92 77.5,98 84,98.5 79,102.5 80.5,109 75,105.5 69.5,109 71,102.5 66,98.5 72.5,98" fill="#fffbeb" />
+          <circle cx="70" cy="95" r="2.8" fill="#ffffff" />
+
+          <ellipse cx="125" cy="101" rx="12" ry="14" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.2" />
+          <ellipse cx="125" cy="101" rx="9.5" ry="11.5" fill="url(#irisGrad)" />
+          <polygon points="125,92 127.5,98 134,98.5 129,102.5 130.5,109 125,105.5 119.5,109 121,102.5 116,98.5 122.5,98" fill="#fffbeb" />
+          <circle cx="120" cy="95" r="2.8" fill="#ffffff" />
+        </g>
+
+        <!-- 4. Surprised Wide Eyes -->
+        <g class="eye-variant eyes-surprised">
+          <ellipse cx="75" cy="101" rx="12" ry="14.5" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.3" />
+          <circle cx="75" cy="102" r="5.5" fill="url(#irisGrad)" />
+          <circle cx="75" cy="102" r="2.6" fill="#2d2640" />
+          <circle cx="73" cy="99" r="2" fill="#ffffff" />
+
+          <ellipse cx="125" cy="101" rx="12" ry="14.5" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.3" />
+          <circle cx="125" cy="102" r="5.5" fill="url(#irisGrad)" />
+          <circle cx="125" cy="102" r="2.6" fill="#2d2640" />
+          <circle cx="123" cy="99" r="2" fill="#ffffff" />
+        </g>
+
+        <!-- 5. Worried Eyes -->
+        <g class="eye-variant eyes-worried">
+          <ellipse cx="75" cy="102" rx="11" ry="12.5" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.2" />
+          <ellipse cx="77" cy="103" rx="7.8" ry="9.2" fill="url(#irisGrad)" />
+          <circle cx="74" cy="98" r="3.2" fill="#ffffff" />
+
+          <ellipse cx="125" cy="102" rx="11" ry="12.5" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.2" />
+          <ellipse cx="123" cy="103" rx="7.8" ry="9.2" fill="url(#irisGrad)" />
+          <circle cx="120" cy="98" r="3.2" fill="#ffffff" />
+        </g>
+
+        <!-- 6. Sad Shimmering Eyes -->
+        <g class="eye-variant eyes-sad">
+          <ellipse cx="75" cy="103" rx="11" ry="12" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.2" />
+          <ellipse cx="75" cy="105" rx="8" ry="9" fill="url(#irisGrad)" />
+          <circle cx="72" cy="100" r="3.4" fill="#ffffff" />
+          <circle cx="78" cy="109" r="2.2" fill="#ffffff" />
+
+          <ellipse cx="125" cy="103" rx="11" ry="12" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.2" />
+          <ellipse cx="125" cy="105" rx="8" ry="9" fill="url(#irisGrad)" />
+          <circle cx="122" cy="100" r="3.4" fill="#ffffff" />
+          <circle cx="128" cy="109" r="2.2" fill="#ffffff" />
+        </g>
+
+        <!-- 7. Thinking Upward-Glance Eyes -->
+        <g class="eye-variant eyes-thinking">
+          <ellipse cx="75" cy="101" rx="11" ry="13" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.2" />
+          <ellipse cx="79" cy="97" rx="7.8" ry="9.2" fill="url(#irisGrad)" />
+          <circle cx="77" cy="93" r="3" fill="#ffffff" />
+
+          <ellipse cx="125" cy="101" rx="11" ry="13" fill="#ffffff" stroke="#4a3f5c" stroke-width="2.2" />
+          <ellipse cx="129" cy="97" rx="7.8" ry="9.2" fill="url(#irisGrad)" />
+          <circle cx="127" cy="93" r="3" fill="#ffffff" />
+        </g>
+
+        <!-- 8. Sleepy Half-Lidded Eyes -->
+        <g class="eye-variant eyes-sleepy">
+          <ellipse cx="75" cy="103" rx="11" ry="9" fill="#ffffff" stroke="#4a3f5c" stroke-width="2" />
+          <ellipse cx="75" cy="105" rx="7.5" ry="6.5" fill="url(#irisGrad)" />
+          <path d="M 63 100 L 87 100 L 87 93 L 63 93 Z" fill="#ffe5d9" />
+          <path d="M 63 100 L 87 100" stroke="#4a3f5c" stroke-width="2.8" stroke-linecap="round" />
+
+          <ellipse cx="125" cy="103" rx="11" ry="9" fill="#ffffff" stroke="#4a3f5c" stroke-width="2" />
+          <ellipse cx="125" cy="105" rx="7.5" ry="6.5" fill="url(#irisGrad)" />
+          <path d="M 113 100 L 137 100 L 137 93 L 113 93 Z" fill="#ffe5d9" />
+          <path d="M 113 100 L 137 100" stroke="#4a3f5c" stroke-width="2.8" stroke-linecap="round" />
+        </g>
+
+        <!-- 9. Sleeping Closed Eyelashes -->
+        <g class="eye-variant eyes-closed">
+          <path d="M 64 103 Q 75 111 86 103" fill="none" stroke="#4a3f5c" stroke-width="3" stroke-linecap="round" />
+          <path d="M 114 103 Q 125 111 136 103" fill="none" stroke="#4a3f5c" stroke-width="3" stroke-linecap="round" />
+        </g>
+
+        <!-- ================= EYEBROWS VARIANTS ================= -->
+        <g class="brow-variant brows-normal">
+          <path d="M 66 84 Q 75 81 84 84" fill="none" stroke="#5c4d7d" stroke-width="2.2" stroke-linecap="round" />
+          <path d="M 116 84 Q 125 81 134 84" fill="none" stroke="#5c4d7d" stroke-width="2.2" stroke-linecap="round" />
+        </g>
+        <g class="brow-variant brows-happy">
+          <path d="M 65 82 Q 75 77 85 82" fill="none" stroke="#5c4d7d" stroke-width="2.4" stroke-linecap="round" />
+          <path d="M 115 82 Q 125 77 135 82" fill="none" stroke="#5c4d7d" stroke-width="2.4" stroke-linecap="round" />
+        </g>
+        <g class="brow-variant brows-surprised">
+          <path d="M 65 78 Q 75 73 85 78" fill="none" stroke="#5c4d7d" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M 115 78 Q 125 73 135 78" fill="none" stroke="#5c4d7d" stroke-width="2.5" stroke-linecap="round" />
+        </g>
+        <g class="brow-variant brows-worried">
+          <path d="M 65 86 L 84 81" fill="none" stroke="#5c4d7d" stroke-width="2.4" stroke-linecap="round" />
+          <path d="M 116 81 L 135 86" fill="none" stroke="#5c4d7d" stroke-width="2.4" stroke-linecap="round" />
+        </g>
+        <g class="brow-variant brows-sad">
+          <path d="M 64 87 Q 74 84 84 81" fill="none" stroke="#5c4d7d" stroke-width="2.4" stroke-linecap="round" />
+          <path d="M 116 81 Q 126 84 136 87" fill="none" stroke="#5c4d7d" stroke-width="2.4" stroke-linecap="round" />
+        </g>
+        <g class="brow-variant brows-thinking">
+          <path d="M 65 85 L 84 84" fill="none" stroke="#5c4d7d" stroke-width="2.4" stroke-linecap="round" />
+          <path d="M 115 79 Q 125 75 135 80" fill="none" stroke="#5c4d7d" stroke-width="2.4" stroke-linecap="round" />
+        </g>
+
+        <!-- ================= MOUTH VARIANTS ================= -->
+        <g class="mouth-variant mouth-smile">
+          <path d="M 94 120 Q 100 126 106 120" fill="none" stroke="#4a3f5c" stroke-width="2.4" stroke-linecap="round" />
+        </g>
+        <g class="mouth-variant mouth-open-smile">
+          <path d="M 92 118 Q 100 130 108 118 Z" fill="#ff758f" stroke="#4a3f5c" stroke-width="2" />
+        </g>
+        <g class="mouth-variant mouth-o">
+          <ellipse cx="100" cy="122" rx="4.5" ry="5.5" fill="#ff758f" stroke="#4a3f5c" stroke-width="2" />
+        </g>
+        <g class="mouth-variant mouth-wavy">
+          <path d="M 92 122 Q 96 119 100 122 T 108 122" fill="none" stroke="#4a3f5c" stroke-width="2.2" stroke-linecap="round" />
+        </g>
+        <g class="mouth-variant mouth-frown">
+          <path d="M 93 125 Q 100 119 107 125" fill="none" stroke="#4a3f5c" stroke-width="2.3" stroke-linecap="round" />
+        </g>
+        <g class="mouth-variant mouth-hmm">
+          <path d="M 95 122 L 104 120" fill="none" stroke="#4a3f5c" stroke-width="2.3" stroke-linecap="round" />
+        </g>
+        <g class="mouth-variant mouth-yawn">
+          <ellipse cx="100" cy="122" rx="5.5" ry="6.5" fill="#ff8fa3" stroke="#4a3f5c" stroke-width="2" />
+        </g>
+        <g class="mouth-variant mouth-sleep">
+          <circle cx="100" cy="122" r="2.5" fill="#4a3f5c" />
+        </g>
+
+        <!-- ================= EXTRA EXPRESSION PROPS ================= -->
+        <!-- Worried Sweat Drop -->
+        <path class="extra-prop prop-sweat" d="M 142 84 C 142 84, 147 92, 142 96 C 137 92, 142 84, 142 84 Z" fill="#7dd3fc" stroke="#0284c7" stroke-width="1.2" />
+
+        <!-- Sad Corner Tears -->
+        <g class="extra-prop prop-tears">
+          <circle cx="64" cy="113" r="3" fill="#7dd3fc" />
+          <circle cx="136" cy="113" r="3" fill="#7dd3fc" />
+        </g>
+
+        <!-- Sleeping Cozy Bubble -->
+        <circle class="extra-prop prop-snot-bubble" cx="109" cy="120" r="6.5" fill="rgba(186, 230, 253, 0.65)" stroke="#7dd3fc" stroke-width="1.3" />
+
+        <!-- Front Layered Anime Bangs -->
+        <path d="M 48 84 C 52 54, 74 42, 100 42 C 126 42, 148 54, 152 84 C 144 68, 134 64, 126 78 C 118 62, 108 58, 100 76 C 92 58, 82 62, 74 78 C 66 64, 56 68, 48 84 Z" fill="url(#hairGrad)" stroke="#5c4d7d" stroke-width="2.2" stroke-linejoin="round" />
+
+        <!-- Expressive Ahoge (Top Hair Tuft) -->
+        <path class="khibi-ahoge" d="M 100 42 C 96 22, 114 14, 118 24 C 112 24, 106 30, 103 42 Z" fill="url(#hairGrad)" stroke="#5c4d7d" stroke-width="2" />
+      </g>
+    </g>
+  </svg>
+  `;
+}
