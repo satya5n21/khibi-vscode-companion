@@ -1,4 +1,9 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
+import {
+    openUserCharactersFolder,
+    pickCharacter
+} from './character/characterPicker';
 import { SettingsManager } from './config/settings';
 import { CompanionBridge } from './bridge/companionBridge';
 import { CharacterController } from './character/characterController';
@@ -10,7 +15,11 @@ import { TestHandler } from './events/testHandler';
 export async function activate(
     context: vscode.ExtensionContext
 ): Promise<void> {
-    const settingsManager = new SettingsManager();
+    const userCharactersDir = path.join(
+        context.globalStorageUri.fsPath,
+        'characters'
+    );
+    const settingsManager = new SettingsManager(userCharactersDir);
     const bridge = new CompanionBridge(context.extensionPath);
     const character = new CharacterController(bridge, settingsManager);
     const activityTracker = new ActivityTracker(character, settingsManager);
@@ -39,6 +48,12 @@ export async function activate(
         vscode.commands.registerCommand('khibi.petCompanion', () => {
             character.triggerReaction('MANUAL_PET');
         }),
+        vscode.commands.registerCommand('khibi.selectCharacter', () =>
+            pickCharacter(context.extensionPath, settingsManager)
+        ),
+        vscode.commands.registerCommand('khibi.openCharactersFolder', () =>
+            openUserCharactersFolder(userCharactersDir)
+        ),
         vscode.commands.registerCommand('khibi.reportTestPass', () => {
             character.triggerReaction('TESTS_PASSED');
         }),

@@ -4,7 +4,7 @@
     "main": "dist/main/main.js",
     "scripts": {
         "build:ts": "tsc -p tsconfig.json",
-        "copy:assets": "node -e \"const fs=require('fs'),path=require('path');fs.mkdirSync('dist/renderer',{recursive:true});fs.copyFileSync('src/renderer/index.html','dist/renderer/index.html');fs.copyFileSync('src/renderer/styles.css','dist/renderer/styles.css');\"",
+        "copy:assets": "node -e \"const fs=require('fs'),path=require('path');fs.mkdirSync('dist/renderer',{recursive:true});fs.copyFileSync('src/renderer/index.html','dist/renderer/index.html');fs.copyFileSync('src/renderer/styles.css','dist/renderer/styles.css');fs.copyFileSync('src/renderer/shim.js','dist/renderer/shim.js');\"",
         "build": "npm run build:ts && npm run copy:assets",
         "start": "electron ."
     },

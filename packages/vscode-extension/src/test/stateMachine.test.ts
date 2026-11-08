@@ -5,7 +5,10 @@ import {
     DialoguePicker,
     StateSnapshot
 } from '@khibi/shared';
-import { parseTestFrameworkOutput } from '../events/testHandler';
+import {
+    matchesTestCommand,
+    parseTestFrameworkOutput
+} from '../events/testParser';
 
 describe('CharacterStateMachine & Dialogue System', () => {
     it('transitions from INITIALIZING -> WAKING_UP on STARTUP and emits greeting', () => {
@@ -92,5 +95,12 @@ describe('Test Framework Output Parser (Jest / Vitest / Mocha)', () => {
 
         const failRes = parseTestFrameworkOutput('  11 passing (85ms)\n  1 failing');
         assert.deepEqual(failRes, { detected: true, passed: false });
+    });
+
+    it('matches built-in and custom test commands', () => {
+        assert.equal(matchesTestCommand('npm test'), true);
+        assert.equal(matchesTestCommand('npx vitest run'), true);
+        assert.equal(matchesTestCommand('git status'), false);
+        assert.equal(matchesTestCommand('my-custom-runner', ['^my-custom-runner']), true);
     });
 });

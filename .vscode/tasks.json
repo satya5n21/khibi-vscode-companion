@@ -1,0 +1,65 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "khibi: build-all",
+            "type": "npm",
+            "script": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "clear": true
+            },
+            "detail": "Builds @khibi/shared, @khibi/companion-app (with HTML/CSS assets), and khibi-vscode-extension"
+        },
+        {
+            "label": "khibi: build-shared",
+            "type": "npm",
+            "script": "build:shared",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "detail": "Compiles packages/shared"
+        },
+        {
+            "label": "khibi: build-companion",
+            "type": "npm",
+            "script": "build:companion",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "detail": "Compiles packages/companion-app and copies renderer HTML/CSS"
+        },
+        {
+            "label": "khibi: build-extension",
+            "type": "npm",
+            "script": "build:extension",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "detail": "Compiles packages/vscode-extension"
+        },
+        {
+            "label": "khibi: test",
+            "type": "npm",
+            "script": "test",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "detail": "Builds all packages and executes the Node test suite"
+        }
+    ]
+}

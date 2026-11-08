@@ -1,0 +1,8 @@
+{
+    "name": "Khibi",
+    "author": "khibi-dev",
+    "description": "The original mint-hoodie chibi with lavender hair. Fully vector, animated with CSS.",
+    "type": "svg",
+    "svg": "khibi.svg",
+    "scale": 1
+}

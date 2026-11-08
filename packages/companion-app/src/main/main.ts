@@ -1,12 +1,32 @@
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, ipcMain, net, protocol, screen } from 'electron';
+import * as fs from 'fs';
 import * as path from 'path';
+import { pathToFileURL } from 'url';
 import WebSocket from 'ws';
 import {
+    CHARACTER_URL_SCHEME,
+    CharacterPackInfo,
     CompanionToExtensionMessage,
+    DEFAULT_CHARACTER_ID,
     ExtensionToCompanionMessage,
     KhibiSettings,
-    WindowSizePreset
+    WindowSizePreset,
+    discoverCharacters,
+    isAllowedImagePath,
+    isPathInside,
+    resolveCharacter
 } from '@khibi/shared';
+
+// Must run before `app` is ready. Lets the renderer load pack art through khibi-char://<pack>/<file>
+// without opening up file:// access or weakening the CSP.
+protocol.registerSchemesAsPrivileged([
+    {
+        scheme: CHARACTER_URL_SCHEME,
+        privileges: { standard: true, secure: true, supportFetchAPI: true }
+    }
+]);
+
+const BUILTIN_CHARACTERS_DIR = path.join(__dirname, '../../characters');
 
 const SIZE_MAP: Record<WindowSizePreset, { width: number; height: number }> = {
     small: { width: 210, height: 270 },
@@ -19,6 +39,27 @@ let wsClient: WebSocket | null = null;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 let parentWatchdog: ReturnType<typeof setInterval> | null = null;
 let isShuttingDown = false;
+let rendererLoaded = false;
+let activePacks = new Map<string, CharacterPackInfo>();
+let characterKey = '';
+
+/**
+ * The extension can talk to us before the page has finished loading, and
+ * `webContents.send` before that point is silently dropped. Keep the latest payload per
+ * channel and replay it once the renderer is ready.
+ */
+const pendingForRenderer = new Map<string, unknown>();
+
+function sendToRenderer(channel: string, payload: unknown): void {
+    if (!mainWindow) {
+        return;
+    }
+    if (!rendererLoaded) {
+        pendingForRenderer.set(channel, payload);
+        return;
+    }
+    mainWindow.webContents.send(channel, payload);
+}
 
 const wsPort = Number(process.env.KHIBI_WS_PORT || 0);
 const wsToken = process.env.KHIBI_WS_TOKEN || '';
@@ -76,8 +117,65 @@ function createCompanionWindow(): void {
         mainWindow?.showInactive();
     });
 
+    mainWindow.webContents.on('did-finish-load', () => {
+        rendererLoaded = true;
+        // If the extension hasn't told us which character to use yet, show the default.
+        if (!pendingForRenderer.has('khibi:character-update') && !characterKey) {
+            loadCharacter(DEFAULT_CHARACTER_ID, []);
+        }
+        for (const [channel, payload] of pendingForRenderer) {
+            mainWindow?.webContents.send(channel, payload);
+        }
+        pendingForRenderer.clear();
+    });
+
     mainWindow.on('closed', () => {
         mainWindow = null;
+        rendererLoaded = false;
+    });
+}
+
+/** Re-scans packs and pushes the requested one (or the default) to the renderer. */
+function loadCharacter(requestedId: string, customRoots: string[]): void {
+    const { packs, errors } = discoverCharacters([
+        { dir: BUILTIN_CHARACTERS_DIR, source: 'builtin' },
+        ...customRoots.map((dir) => ({ dir, source: 'user' as const }))
+    ]);
+    for (const problem of errors) {
+        console.warn(`[Khibi] Skipped character pack – ${problem}`);
+    }
+
+    activePacks = new Map(packs.map((p) => [p.id, p]));
+    const pack = activePacks.get(requestedId) ?? activePacks.get(DEFAULT_CHARACTER_ID);
+    if (!pack) {
+        console.error('[Khibi] No character packs found – not even the built-in one.');
+        return;
+    }
+    characterKey = `${requestedId}|${customRoots.join('|')}`;
+    sendToRenderer('khibi:character-update', resolveCharacter(pack));
+}
+
+function registerCharacterProtocol(): void {
+    protocol.handle(CHARACTER_URL_SCHEME, (request) => {
+        try {
+            const url = new URL(request.url);
+            const pack = activePacks.get(url.hostname);
+            if (!pack) {
+                return new Response('Unknown character', { status: 404 });
+            }
+            const rel = decodeURIComponent(url.pathname).replace(/^[/\\]+/, '');
+            const target = path.resolve(pack.dir, rel);
+            if (
+                !isAllowedImagePath(rel) ||
+                !fs.existsSync(target) ||
+                !isPathInside(pack.dir, target)
+            ) {
+                return new Response('Forbidden', { status: 403 });
+            }
+            return net.fetch(pathToFileURL(target).toString());
+        } catch {
+            return new Response('Bad request', { status: 400 });
+        }
     });
 }
 
@@ -148,12 +246,18 @@ function handleExtensionMessage(msg: ExtensionToCompanionMessage): void {
 
     switch (msg.type) {
         case 'STATE_UPDATE':
-            mainWindow.webContents.send('khibi:state-update', msg.payload);
+            sendToRenderer('khibi:state-update', msg.payload);
             break;
-        case 'SETTINGS_UPDATE':
+        case 'SETTINGS_UPDATE': {
             applyWindowSettings(msg.payload);
-            mainWindow.webContents.send('khibi:settings-update', msg.payload);
+            const roots = msg.payload.customCharacterRoots ?? [];
+            const wanted = msg.payload.character || DEFAULT_CHARACTER_ID;
+            if (`${wanted}|${roots.join('|')}` !== characterKey) {
+                loadCharacter(wanted, roots);
+            }
+            sendToRenderer('khibi:settings-update', msg.payload);
             break;
+        }
         case 'WINDOW_VISIBILITY':
             if (msg.payload.visible) {
                 mainWindow.showInactive();
@@ -205,6 +309,7 @@ ipcMain.on('khibi:move-window', (_event, delta: { dx: number; dy: number }) => {
 });
 
 app.whenReady().then(() => {
+    registerCharacterProtocol();
     createCompanionWindow();
     connectBridge();
     startParentProcessWatchdog();

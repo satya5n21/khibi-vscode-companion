@@ -1,0 +1,55 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Khibi Extension (F5)",
+            "type": "extensionHost",
+            "request": "launch",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-extension"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/packages/vscode-extension/dist/**/*.js",
+                "${workspaceFolder}/packages/shared/dist/**/*.js"
+            ],
+            "preLaunchTask": "khibi: build-all",
+            "sourceMaps": true,
+            "resolveSourceMapLocations": [
+                "${workspaceFolder}/packages/**",
+                "!**/node_modules/**"
+            ]
+        },
+        {
+            "name": "Run Khibi Unit Tests",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/packages/vscode-extension/dist/test/stateMachine.test.js",
+            "args": [],
+            "runtimeArgs": [
+                "--test"
+            ],
+            "cwd": "${workspaceFolder}/packages/vscode-extension",
+            "preLaunchTask": "khibi: build-all",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "name": "Preview Electron Companion Window (Standalone)",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+            "windows": {
+                "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+            },
+            "args": [
+                "${workspaceFolder}/packages/companion-app/dist/main/main.js"
+            ],
+            "cwd": "${workspaceFolder}/packages/companion-app",
+            "preLaunchTask": "khibi: build-all",
+            "console": "integratedTerminal"
+        }
+    ]
+}

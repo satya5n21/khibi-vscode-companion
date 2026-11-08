@@ -33,6 +33,14 @@
                 "title": "Khibi: Give Khibi a Headpat ❤️"
             },
             {
+                "command": "khibi.selectCharacter",
+                "title": "Khibi: Choose Character"
+            },
+            {
+                "command": "khibi.openCharactersFolder",
+                "title": "Khibi: Open My Characters Folder"
+            },
+            {
                 "command": "khibi.reportTestPass",
                 "title": "Khibi: Trigger Test Pass Celebration"
             },
@@ -48,6 +56,17 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Enable or disable the Khibi desktop companion."
+                },
+                "khibi.character": {
+                    "type": "string",
+                    "default": "khibi",
+                    "description": "Folder name of the character pack to show (use 'Khibi: Choose Character' to pick from a list)."
+                },
+                "khibi.customCharactersPath": {
+                    "type": "string",
+                    "default": "",
+                    "scope": "machine",
+                    "description": "Optional extra folder containing character pack folders. Packs in 'Khibi: Open My Characters Folder' are always loaded."
                 },
                 "khibi.inactivityTimeoutMinutes": {
                     "type": "number",
@@ -73,9 +92,9 @@
                 },
                 "khibi.windowOpacity": {
                     "type": "number",
-                    "default": 1.0,
+                    "default": 1,
                     "minimum": 0.3,
-                    "maximum": 1.0,
+                    "maximum": 1,
                     "description": "Opacity of Khibi's companion window (0.3 to 1.0)."
                 },
                 "khibi.soundEffects": {
@@ -131,7 +150,7 @@
     },
     "scripts": {
         "build": "tsc -p tsconfig.json",
-        "test": "npm run build && node --test dist/test/stateMachine.test.js",
+        "test": "npm run build && node --test dist/test/stateMachine.test.js dist/test/characterRegistry.test.js",
         "package": "vsce package"
     },
     "dependencies": {

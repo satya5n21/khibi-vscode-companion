@@ -6,7 +6,11 @@ export class SettingsManager implements vscode.Disposable {
     public readonly onDidChange = this.onDidChangeEmitter.event;
     private readonly configListener: vscode.Disposable;
 
-    constructor() {
+    /**
+     * @param userCharactersDir Folder inside VS Code's global storage where users can drop
+     *                          their own character packs. Always scanned.
+     */
+    constructor(private readonly userCharactersDir: string) {
         this.configListener = vscode.workspace.onDidChangeConfiguration((e) => {
             if (e.affectsConfiguration('khibi')) {
                 this.onDidChangeEmitter.fire(this.getSettings());
@@ -16,8 +20,14 @@ export class SettingsManager implements vscode.Disposable {
 
     public getSettings(): KhibiSettings {
         const cfg = vscode.workspace.getConfiguration('khibi');
+        const customPath = cfg.get<string>('customCharactersPath', '').trim();
         return {
             enabled: cfg.get<boolean>('enabled', true),
+            character: cfg.get<string>('character', 'khibi').trim() || 'khibi',
+            customCharacterRoots: [
+                this.userCharactersDir,
+                ...(customPath ? [customPath] : [])
+            ],
             inactivityTimeoutMinutes: Math.max(
                 1,
                 cfg.get<number>('inactivityTimeoutMinutes', 5)

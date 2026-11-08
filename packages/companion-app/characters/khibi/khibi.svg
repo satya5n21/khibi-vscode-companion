@@ -1,14 +1,4 @@
-/**
- * Returns the complete layered SVG markup for Khibi:
- * - Pastel mint hoodie with drawstring pom-poms
- * - Oversized expressive head with soft peach skin & rosy cheeks
- * - Fluffy pastel periwinkle-lavender anime hair + animated ahoge cowlick
- * - 10 distinct expression layers (normal, happy, excited/celebrating, sleepy, sleeping,
- *   surprised, worried, sad, thinking)
- */
-export function buildKhibiSvg(): string {
-    return `
-  <svg class="khibi-svg" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+<svg class="khibi-svg" viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
         <stop offset="0%" stop-color="#c3b5ff" />
@@ -258,5 +248,3 @@ export function buildKhibiSvg(): string {
       </g>
     </g>
   </svg>
-  `;
-}

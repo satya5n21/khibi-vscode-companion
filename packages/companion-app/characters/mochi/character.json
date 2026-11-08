@@ -1,0 +1,19 @@
+{
+    "name": "Mochi",
+    "author": "khibi-dev",
+    "description": "A squishy mochi blob. Sample \"images\" pack - one picture per mood.",
+    "type": "images",
+    "scale": 1,
+    "expressions": {
+        "normal": "normal.svg",
+        "happy": "happy.svg",
+        "excited": "excited.svg",
+        "celebrating": "celebrating.svg",
+        "sleepy": "sleepy.svg",
+        "sleeping": "sleeping.svg",
+        "surprised": "surprised.svg",
+        "sad": "sad.svg",
+        "worried": "worried.svg",
+        "thinking": "thinking.svg"
+    }
+}
