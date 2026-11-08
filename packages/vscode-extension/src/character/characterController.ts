@@ -52,7 +52,7 @@ export class CharacterController implements vscode.Disposable {
         this.disposables.push(
             this.bridge.onUserInteraction(async (action) => {
                 if (action === 'PET_CHARACTER') {
-                    this.triggerReaction('MANUAL_PET');
+                    this.triggerReaction('MANUAL_PET', undefined, true);
                 } else if (action === 'TOGGLE_MUTE') {
                     const current = this.settingsManager.getSettings();
                     await this.settingsManager.updateSetting(
@@ -70,35 +70,43 @@ export class CharacterController implements vscode.Disposable {
         );
     }
 
+    /**
+     * @param manual true when the user asked for this directly (headpat, "trigger test pass"
+     *               commands, clicking the character). Manual requests ignore `khibi.paused`
+     *               and the per-reaction toggles – those only gate *automatic* reactions.
+     */
     public triggerReaction(
         reaction: ReactionTrigger,
-        customDialogue?: string
+        customDialogue?: string,
+        manual = false
     ): void {
         const settings = this.settingsManager.getSettings();
-        if (!settings.enabled || settings.paused) {
+        if (!settings.enabled || (settings.paused && !manual)) {
             return;
         }
 
         // Check individual reaction toggles
-        if (reaction === 'FILE_SAVED' && !settings.reactions.onSave) {
-            return;
-        }
-        if (reaction === 'ERROR_DETECTED' && !settings.reactions.onError) {
-            return;
-        }
-        if (
-            (reaction === 'TESTS_PASSED' ||
-                reaction === 'TESTS_FAILED' ||
-                reaction === 'TESTS_RUNNING') &&
-            !settings.reactions.onTestResult
-        ) {
-            return;
-        }
-        if (
-            (reaction === 'IDLE_WARNING' || reaction === 'FALL_ASLEEP') &&
-            !settings.reactions.onIdleSleep
-        ) {
-            return;
+        if (!manual) {
+            if (reaction === 'FILE_SAVED' && !settings.reactions.onSave) {
+                return;
+            }
+            if (reaction === 'ERROR_DETECTED' && !settings.reactions.onError) {
+                return;
+            }
+            if (
+                (reaction === 'TESTS_PASSED' ||
+                    reaction === 'TESTS_FAILED' ||
+                    reaction === 'TESTS_RUNNING') &&
+                !settings.reactions.onTestResult
+            ) {
+                return;
+            }
+            if (
+                (reaction === 'IDLE_WARNING' || reaction === 'FALL_ASLEEP') &&
+                !settings.reactions.onIdleSleep
+            ) {
+                return;
+            }
         }
 
         // Throttle wake-up greeting dialogues so they feel natural and never spam

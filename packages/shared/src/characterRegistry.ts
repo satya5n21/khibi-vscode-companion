@@ -147,9 +147,55 @@ export function validateManifest(
     return '"type" must be "svg" or "images"';
 }
 
+function titleCase(id: string): string {
+    return id
+        .split(/[-_]+/)
+        .filter(Boolean)
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ');
+}
+
 /**
- * Scans each root for `<root>/<id>/character.json`. Later roots override earlier ones
- * with the same id, so a user pack can replace a built-in one.
+ * Lets a folder work without a `character.json`: any image named `<mood>.<ext>` or ending in
+ * `-<mood>.<ext>` / `_<mood>.<ext>` (e.g. `character-1-happy.webp`) is picked up.
+ * Returns null when there is no `normal` image.
+ */
+export function inferManifest(
+    packDir: string,
+    id: string
+): CharacterManifest | null {
+    let files: string[];
+    try {
+        files = fs.readdirSync(packDir).filter(isAllowedImagePath).sort();
+    } catch {
+        return null;
+    }
+    // Prefer lighter formats when the same mood exists twice.
+    const rank = (f: string) =>
+        ['.webp', '.png', '.gif', '.jpg', '.jpeg', '.svg'].indexOf(
+            path.extname(f).toLowerCase()
+        );
+    const expressions: Record<string, string> = {};
+    for (const expr of ALL_EXPRESSIONS) {
+        const matches = files
+            .filter((f) => {
+                const stem = path.basename(f, path.extname(f)).toLowerCase();
+                return stem === expr || stem.endsWith(`-${expr}`) || stem.endsWith(`_${expr}`);
+            })
+            .sort((a, b) => rank(a) - rank(b));
+        if (matches.length > 0) {
+            expressions[expr] = matches[0];
+        }
+    }
+    if (!expressions.normal) {
+        return null;
+    }
+    return { name: titleCase(id), type: 'images', expressions };
+}
+
+/**
+ * Scans each root for `<root>/<id>/character.json` (or, failing that, mood-named images).
+ * Later roots override earlier ones with the same id, so a user pack can replace a built-in one.
  */
 export function discoverCharacters(
     roots: ReadonlyArray<{ dir: string; source: 'builtin' | 'user' }>
@@ -171,8 +217,10 @@ export function discoverCharacters(
             }
             const packDir = path.join(root.dir, entry.name);
             const manifestPath = path.join(packDir, CHARACTER_MANIFEST_FILE);
-            if (!fs.existsSync(manifestPath)) {
-                continue;
+            const hasManifest = fs.existsSync(manifestPath);
+            const inferred = hasManifest ? null : inferManifest(packDir, entry.name);
+            if (!hasManifest && !inferred) {
+                continue; // Not a character folder.
             }
             if (!ID_PATTERN.test(entry.name)) {
                 errors.push(
@@ -181,9 +229,9 @@ export function discoverCharacters(
                 continue;
             }
             try {
-                const manifest = JSON.parse(
-                    fs.readFileSync(manifestPath, 'utf8')
-                ) as CharacterManifest;
+                const manifest =
+                    inferred ??
+                    (JSON.parse(fs.readFileSync(manifestPath, 'utf8')) as CharacterManifest);
                 const problem = validateManifest(manifest, packDir);
                 if (problem) {
                     errors.push(`${entry.name}: ${problem}`);

@@ -113,6 +113,32 @@ describe('Character packs', () => {
         }
     });
 
+    it('works without character.json by reading mood-named images', () => {
+        const dir = path.join(root, 'auto-hero');
+        fs.mkdirSync(dir);
+        for (const f of ['auto-hero-normal.png', 'auto-hero-happy.webp', 'auto-hero-happy.png', 'notes.txt', 'sad.png', 'random.png']) {
+            fs.writeFileSync(path.join(dir, f), 'x');
+        }
+        const pack = discoverCharacters([{ dir: root, source: 'user' }]).packs.find(
+            (p) => p.id === 'auto-hero'
+        );
+        assert.ok(pack);
+        assert.equal(pack.name, 'Auto Hero');
+        assert.equal(pack.manifest.expressions?.normal, 'auto-hero-normal.png');
+        assert.equal(pack.manifest.expressions?.happy, 'auto-hero-happy.webp'); // webp preferred
+        assert.equal(pack.manifest.expressions?.sad, 'sad.png');
+        assert.equal(pack.manifest.expressions?.thinking, undefined);
+    });
+
+    it('ignores folders that have neither a manifest nor a normal image', () => {
+        const dir = path.join(root, 'stray-folder');
+        fs.mkdirSync(dir);
+        fs.writeFileSync(path.join(dir, 'happy.png'), 'x');
+        const { packs, errors } = discoverCharacters([{ dir: root, source: 'user' }]);
+        assert.ok(!packs.some((p) => p.id === 'stray-folder'));
+        assert.ok(!errors.some((e) => e.startsWith('stray-folder')));
+    });
+
     it('isPathInside blocks paths outside the pack', () => {
         const dir = path.join(root, 'vec');
         assert.equal(isPathInside(dir, path.join(dir, 'a.svg')), true);

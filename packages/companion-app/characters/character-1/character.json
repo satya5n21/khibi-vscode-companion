@@ -1,0 +1,17 @@
+{
+    "name": "Character 1",
+    "type": "images",
+    "scale": 1.2,
+    "expressions": {
+        "normal": "character-1-normal.webp",
+        "happy": "character-1-happy.webp",
+        "excited": "character-1-excited.webp",
+        "celebrating": "character-1-celebrating.webp",
+        "sleepy": "character-1-sleepy.webp",
+        "sleeping": "character-1-sleeping.webp",
+        "surprised": "character-1-surprised.webp",
+        "sad": "character-1-sad.webp",
+        "worried": "character-1-worried.webp",
+        "thinking": "character-1-thinking.webp"
+    }
+}

@@ -23,7 +23,7 @@ export class SettingsManager implements vscode.Disposable {
         const customPath = cfg.get<string>('customCharactersPath', '').trim();
         return {
             enabled: cfg.get<boolean>('enabled', true),
-            character: cfg.get<string>('character', 'khibi').trim() || 'khibi',
+            character: cfg.get<string>('character', 'character-1').trim() || 'character-1',
             customCharacterRoots: [
                 this.userCharactersDir,
                 ...(customPath ? [customPath] : [])

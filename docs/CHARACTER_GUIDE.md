@@ -5,11 +5,32 @@ Characters are **packs**: a folder with a `character.json` and some art. Drop th
 
 Where packs live (later entries win if two share a folder name):
 
-1. Built in: `packages/companion-app/characters/` (ships with the extension – `khibi`, `mochi`)
+1. Built in: `packages/companion-app/characters/` (ships with the extension – `character-1`, `khibi`, `mochi`)
 2. Yours: run **`Khibi: Open My Characters Folder`** (lives in VS Code's global storage, survives updates)
 3. Optional: any folder set in the `khibi.customCharactersPath` setting
 
 Folder names are the character id: lowercase letters, digits, `-` or `_`.
+
+## Fastest way to add a character (raw AI images → working pack)
+
+1. Create `assets/<id>/` and drop your raw images in, named **`<id>-<mood>.png`**
+   (e.g. `assets/fox-girl/fox-girl-normal.png`, `…-happy.png`, `…-sad.png`). Any size; flat-colour
+   (green screen) or already-transparent backgrounds both work. Only `normal` is required.
+2. Run `npm run characters:prepare` (all folders) or `npm run characters:prepare -- fox-girl`.
+   It needs `ffmpeg` on PATH and, per image: scales to 512 px, keys out the background colour (sampled
+   from the top-left pixel), paints over the bottom-right AI-generator sparkle, and writes a small
+   transparent `.webp` plus a `character.json` into `packages/companion-app/characters/<id>/`.
+   Flags: `--size 768`, `--keep-corner` (don't blank the corner), `--keep-bg` (don't key),
+   `--similarity 0.3` (raise if green fringes remain, lower if it eats the artwork).
+   Re-running never overwrites an edited `character.json`.
+3. Rebuild (`npm run build`) and run **Khibi: Choose Character**.
+
+**No JSON needed:** a folder that has no `character.json` still works if its images are named
+`<mood>.<ext>` or `<anything>-<mood>.<ext>` (webp is preferred over png). The display name is the
+folder name, title-cased. So you can also just drop already-transparent images into
+**Khibi: Open My Characters Folder** without touching the repo at all.
+
+Tip: if a character looks small in the window, raise `"scale"` in its `character.json` (e.g. `1.2`).
 
 ---
 

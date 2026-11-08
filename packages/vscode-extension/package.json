@@ -59,7 +59,7 @@
                 },
                 "khibi.character": {
                     "type": "string",
-                    "default": "khibi",
+                    "default": "character-1",
                     "description": "Folder name of the character pack to show (use 'Khibi: Choose Character' to pick from a list)."
                 },
                 "khibi.customCharactersPath": {

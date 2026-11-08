@@ -13,7 +13,8 @@
         "build:companion": "npm --workspace=@khibi/companion-app run build",
         "build:extension": "npm --workspace=khibi-vscode-extension run build",
         "build": "npm run build:shared && npm run build:companion && npm run build:extension",
-        "test": "npm --workspace=khibi-vscode-extension run test",
+        "characters:prepare": "npm run build:shared && node scripts/prepare-character.js",
+        "test":"npm --workspace=khibi-vscode-extension run test",
         "package:vsix": "npm run build && npm --workspace=khibi-vscode-extension run package"
     },
     "devDependencies": {

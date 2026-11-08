@@ -46,7 +46,7 @@ export async function activate(
             );
         }),
         vscode.commands.registerCommand('khibi.petCompanion', () => {
-            character.triggerReaction('MANUAL_PET');
+            character.triggerReaction('MANUAL_PET', undefined, true);
         }),
         vscode.commands.registerCommand('khibi.selectCharacter', () =>
             pickCharacter(context.extensionPath, settingsManager)
@@ -55,10 +55,10 @@ export async function activate(
             openUserCharactersFolder(userCharactersDir)
         ),
         vscode.commands.registerCommand('khibi.reportTestPass', () => {
-            character.triggerReaction('TESTS_PASSED');
+            character.triggerReaction('TESTS_PASSED', undefined, true);
         }),
         vscode.commands.registerCommand('khibi.reportTestFail', () => {
-            character.triggerReaction('TESTS_FAILED');
+            character.triggerReaction('TESTS_FAILED', undefined, true);
         })
     ];
 
